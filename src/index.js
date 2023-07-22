@@ -32,16 +32,22 @@ function onLoad() {
 }
 
 function onSelect(evt) {
-  fetchCatByBreed('images/search', evt.target.value)
-    .then(resp => {
-      refs.breedInfoEl.innerHTML = createMarkupInfo(resp[0]);
-      refs.breedInfoEl.style.display = 'flex';
-      refs.breedInfoEl.style.gap = '20px';
-    })
-    .catch(() =>
-      Notify.failure('Oops! Something went wrong! Try reloading the page!')
-    );
-}
+    // Clear previous cat information
+    refs.breedInfoEl.innerHTML = '';
+  
+    fetchCatByBreed('images/search', evt.target.value)
+      .then(resp => {
+        refs.breedInfoEl.innerHTML = createMarkupInfo(resp[0]);
+        refs.breedInfoEl.style.display = 'flex';
+        refs.breedInfoEl.style.gap = '20px';
+      })
+      .catch(() => {
+        // Clear previous cat information in case of an error
+        refs.breedInfoEl.innerHTML = '';
+        Notify.failure('Oops! Something went wrong! Try reloading the page!');
+      });
+  }
+  
 
 function createMarkupSelect(arr) {
   return (

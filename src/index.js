@@ -6,10 +6,10 @@ import { fetchBreeds, fetchCatByBreed } from './cat-api';
 const bodyEl = document.querySelector('body');
 
 const refs = {
-  selectBreedEl: findRef(bodyEl.children, 'breed-select'),
-  loaderEl: findRef(bodyEl.children, 'wrapper-loader'),
-  errorEl: findRef(bodyEl.children, 'error'),
-  breedInfoEl: findRef(bodyEl.children, 'cat-info'),
+  selectBreedEl: document.querySelector('.breed-select'),
+  loaderEl: document.querySelector('.loader'),
+  errorEl: document.querySelector('.error'),
+  breedInfoEl: document.querySelector('.cat-info'),
 };
 
 hideElement(refs.errorEl, refs.selectBreedEl);
@@ -18,13 +18,17 @@ window.addEventListener('load', onLoad);
 refs.selectBreedEl.addEventListener('change', onSelect);
 
 function onLoad() {
+  // Показати елемент завантаження під час отримання даних
+  hideElement(refs.selectBreedEl, refs.errorEl);
+  refs.loaderEl.classList.remove('hidden'); // Видалення класу 'hidden', щоб показати елемент завантаження
+
   fetchBreeds('/breeds')
     .then(data => {
       refs.selectBreedEl.innerHTML = createMarkupSelect(data);
       new SlimSelect({
         select: '.breed-select',
       });
-      hideElement(refs.loaderEl, refs.selectBreedEl);
+      hideElement(refs.loaderEl); // Приховати елемент завантаження після успішного отримання даних
     })
     .catch(() =>
       Notify.failure('Oops! Something went wrong! Try reloading the page!')
@@ -32,22 +36,21 @@ function onLoad() {
 }
 
 function onSelect(evt) {
-    // Clear previous cat information
-    refs.breedInfoEl.innerHTML = '';
-  
-    fetchCatByBreed('images/search', evt.target.value)
-      .then(resp => {
-        refs.breedInfoEl.innerHTML = createMarkupInfo(resp[0]);
-        refs.breedInfoEl.style.display = 'flex';
-        refs.breedInfoEl.style.gap = '20px';
-      })
-      .catch(() => {
-        // Clear previous cat information in case of an error
-        refs.breedInfoEl.innerHTML = '';
-        Notify.failure('Oops! Something went wrong! Try reloading the page!');
-      });
-  }
-  
+  // Показати елемент завантаження під час отримання даних
+  hideElement(refs.breedInfoEl);
+  refs.loaderEl.classList.remove('hidden'); // Видалення класу 'hidden', щоб показати елемент завантаження
+
+  fetchCatByBreed('images/search', evt.target.value)
+    .then(resp => {
+      refs.breedInfoEl.innerHTML = createMarkupInfo(resp[0]);
+      refs.breedInfoEl.style.display = 'flex';
+      refs.breedInfoEl.style.gap = '20px';
+      hideElement(refs.loaderEl); // Приховати елемент завантаження після успішного отримання даних
+    })
+    .catch(() =>
+      Notify.failure('Oops! Something went wrong! Try reloading the page!')
+    );
+}
 
 function createMarkupSelect(arr) {
   return (

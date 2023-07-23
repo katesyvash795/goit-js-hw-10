@@ -35,19 +35,19 @@ function onLoad() {
 }
 
 function onSelect(evt) {
-  hideElement(refs.breedInfoEl); // Скрываем элемент div.cat-info перед отправкой запроса
-  showElement(refs.loaderEl); // Показываем элемент p.loader во время выполнения запроса
+  hideElement(refs.breedInfoEl); 
+  showElement(refs.loaderEl); 
 
   fetchCatByBreed('images/search', evt.target.value)
     .then(resp => {
       refs.breedInfoEl.innerHTML = createMarkupInfo(resp[0]);
       refs.breedInfoEl.style.display = 'flex';
       refs.breedInfoEl.style.gap = '20px';
-      hideElement(refs.loaderEl); // Скрываем элемент p.loader после получения ответа
+      hideElement(refs.loaderEl);
     })
     .catch(() => {
-      Notify.failure('Упс! Что-то пошло не так! Попробуйте обновить страницу!');
-      hideElement(refs.loaderEl); // Скрываем элемент p.loader в случае ошибки
+      Notify.failure('Oops! Something went wrong! Try reloading the page!');
+      hideElement(refs.loaderEl); 
     });
 }
 

@@ -20,7 +20,6 @@ refs.selectBreedEl.addEventListener('change', onSelect);
 function onLoad() {
   hideElement(refs.errorEl, refs.selectBreedEl);
 
-  // Скрыть cat-info и показать loader во время загрузки данных
   hideElement(refs.breedInfoEl);
   refs.loaderEl.classList.remove('hidden');
 
@@ -31,18 +30,17 @@ function onLoad() {
         select: '.breed-select',
       });
 
-      // Скрыть loader и показать cat-info после успешной загрузки данных
       hideElement(refs.loaderEl);
       refs.breedInfoEl.classList.remove('hidden');
     })
     .catch(() => {
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
-      hideElement(refs.loaderEl); // Скрыть loader после вывода ошибки
+      hideElement(refs.loaderEl); 
     });
 }
 
 function onSelect(evt) {
-  // Скрыть cat-info и показать loader во время загрузки данных
+
   hideElement(refs.breedInfoEl);
   refs.loaderEl.classList.remove('hidden');
 
@@ -52,13 +50,12 @@ function onSelect(evt) {
       refs.breedInfoEl.style.display = 'flex';
       refs.breedInfoEl.style.gap = '20px';
 
-      // Скрыть loader и показать cat-info после успешной загрузки данных
       hideElement(refs.loaderEl);
       refs.breedInfoEl.classList.remove('hidden');
     })
     .catch(() => {
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
-      hideElement(refs.loaderEl); // Скрыть loader после вывода ошибки
+      hideElement(refs.loaderEl); 
     });
 }
 

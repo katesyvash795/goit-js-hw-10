@@ -67,9 +67,9 @@ function createMarkupInfo({ url, breeds }) {
       <p>${description}</p></div>`;
 }
 
-function hideElement(...elems) {
-  elems.forEach(i => i.classList.toggle('hidden'));
-}
+// function hideElement(...elems) {
+//   elems.forEach(i => i.classList.toggle('hidden'));
+// }
 
 function findRef(queryEl, classN) {
   return [...queryEl].find(i => i.className === classN);

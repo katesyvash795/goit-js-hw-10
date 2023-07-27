@@ -16,38 +16,49 @@ hideElement(refs.errorEl, refs.selectBreedEl);
 
 window.addEventListener('load', onLoad);
 refs.selectBreedEl.addEventListener('change', onSelect);
-function showElement(...elems) {
-  elems.forEach(i => i.classList.remove('hidden'));
-}
 
 function onLoad() {
+  hideElement(refs.errorEl, refs.selectBreedEl);
+
+  // Скрыть cat-info и показать loader во время загрузки данных
+  hideElement(refs.breedInfoEl);
+  refs.loaderEl.classList.remove('hidden');
+
   fetchBreeds('/breeds')
     .then(data => {
       refs.selectBreedEl.innerHTML = createMarkupSelect(data);
       new SlimSelect({
         select: '.breed-select',
       });
-      hideElement(refs.loaderEl, refs.selectBreedEl);
+
+      // Скрыть loader и показать cat-info после успешной загрузки данных
+      hideElement(refs.loaderEl);
+      refs.breedInfoEl.classList.remove('hidden');
     })
-    .catch(() =>
-      Notify.failure('Oops! Something went wrong! Try reloading the page!')
-    );
+    .catch(() => {
+      Notify.failure('Oops! Something went wrong! Try reloading the page!');
+      hideElement(refs.loaderEl); // Скрыть loader после вывода ошибки
+    });
 }
 
 function onSelect(evt) {
-  hideElement(refs.breedInfoEl); 
-  showElement(refs.loaderEl); 
+  // Скрыть cat-info и показать loader во время загрузки данных
+  hideElement(refs.breedInfoEl);
+  refs.loaderEl.classList.remove('hidden');
 
   fetchCatByBreed('images/search', evt.target.value)
     .then(resp => {
       refs.breedInfoEl.innerHTML = createMarkupInfo(resp[0]);
       refs.breedInfoEl.style.display = 'flex';
       refs.breedInfoEl.style.gap = '20px';
+
+      // Скрыть loader и показать cat-info после успешной загрузки данных
       hideElement(refs.loaderEl);
+      refs.breedInfoEl.classList.remove('hidden');
     })
     .catch(() => {
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
-      hideElement(refs.loaderEl); 
+      hideElement(refs.loaderEl); // Скрыть loader после вывода ошибки
     });
 }
 

@@ -18,9 +18,11 @@ refs.selectBreedEl.addEventListener('change', onSelect);
 function onLoad() {
   hideElement(refs.errorEl, refs.selectBreedEl);
 
-  // Скрыть cat-info и показать loader во время загрузки данных
+  
   hideElement(refs.breedInfoEl);
   refs.loaderEl.classList.remove('hidden');
+  refs.selectBreedEl.classList.add('hidden');
+  refs.breedInfoEl.classList.add('hidden'); 
 
   fetchBreeds('/breeds')
     .then(data => {
@@ -29,23 +31,24 @@ function onLoad() {
         select: '.breed-select',
       });
 
-      // Скрыть loader и показать cat-info после успешной загрузки данных
+      
       hideElement(refs.loaderEl);
-      refs.breedInfoEl.classList.remove('hidden');
+      refs.breedInfoEl.classList.remove('hidden'); 
+      refs.selectBreedEl.classList.remove('hidden');
     })
     .catch(() => {
-      // Notify.failure('Oops! Something went wrong! Try reloading the page!');
-      hideElement(refs.loaderEl); // Скрыть loader после вывода ошибки
+      hideElement(refs.loaderEl); 
+      refs.selectBreedEl.classList.remove('hidden');
     });
 }
 
-// ... інші частини коду ...
-
-
 function onSelect(evt) {
-  // Скрыть cat-info и показать loader во время загрузки данных
+  
+  refs.breedInfoEl.innerHTML = ''; 
   hideElement(refs.breedInfoEl);
   refs.loaderEl.classList.remove('hidden');
+  refs.selectBreedEl.classList.add('hidden');
+  refs.breedInfoEl.classList.add('hidden'); 
 
   fetchCatByBreed('images/search', evt.target.value)
     .then(resp => {
@@ -53,15 +56,18 @@ function onSelect(evt) {
       refs.breedInfoEl.style.display = 'flex';
       refs.breedInfoEl.style.gap = '20px';
 
-      // Скрыть loader и показать cat-info после успешной загрузки данных
+    
       hideElement(refs.loaderEl);
-      refs.breedInfoEl.classList.remove('hidden');
+      refs.breedInfoEl.classList.remove('hidden'); 
+      refs.selectBreedEl.classList.remove('hidden');
     })
     .catch(() => {
       Notify.failure('Oops! Something went wrong! Try reloading the page!');
-      hideElement(refs.loaderEl); // Скрыть loader после вывода ошибки
+      hideElement(refs.loaderEl);
+      refs.selectBreedEl.classList.remove('hidden');
     });
 }
+
 
 function createMarkupSelect(arr) {
   return (
